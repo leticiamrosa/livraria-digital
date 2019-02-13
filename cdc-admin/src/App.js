@@ -2,33 +2,39 @@ import React, { Component } from 'react';
 import './css/pure-min.css';
 import './css/side-menu.css';
 import './App.css';
+import $ from 'jquery'
 
 class App extends Component {
 
   constructor() {
     super();
     this.state = {
-      lista: [ {
-        nome: 'leticia',
-        email: 'leticia@email.com',
-        senha: '123456',
-      }],
+      lista: [],
     };
+  }
+
+  componentWillMount() {
+    $.ajax({
+      url: 'https://randomapi.com/api/6de6abfedb24f889e0b5f675edc50deb?fmt=raw&sole',
+      dataType: 'json',
+      success: function(data) {
+        console.log(data);
+        this.setState({ lista: data });
+      }.bind(this)
+    });
   }
 
 
   renderList() {
     const { lista } = this.state;
-
     const renderLista = lista.map(autor => {
       return (
         <tr>
-        <td>{autor.nome}</td>
+        <td>{autor.first} {autor.last}</td>
         <td>{autor.email}</td>
       </tr>
       );
     });
-
     return renderLista;
     
   }
