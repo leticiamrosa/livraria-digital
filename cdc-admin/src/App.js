@@ -4,15 +4,18 @@ import './css/side-menu.css';
 import './App.css';
 import $ from 'jquery'
 
+import InputForm from './componentes/InputForm';
+import ButtonSubmit from './componentes/ButtonSubmit';
+
 class App extends Component {
 
   constructor() {
     super();
     this.state = {
       lista: [],
-      first: undefined,
-      email: undefined,
-      address: undefined,
+      name: '',
+      email: '',
+      address: '',
       novaLista: [],
     };
     this.setNome = this.setNome.bind(this);
@@ -24,10 +27,13 @@ class App extends Component {
     $.ajax({
       url: 'https://randomapi.com/api/6de6abfedb24f889e0b5f675edc50deb?fmt=raw&sole',
       dataType: 'json',
-      success: function(data) {
+      success: (data) => {
         console.log(data);
         this.setState({ lista: data });
-      }.bind(this)
+      }, 
+      error: (error) => {
+        console.log(error);
+      },
     });
   }
 
@@ -36,7 +42,7 @@ class App extends Component {
     const { lista } = this.state;
     const renderLista = lista.map(autor => {
       return (
-        <tr key={autor.address}>
+      <tr key={autor.address}>
         <td>{autor.first} {autor.last}</td>
         <td>{autor.email}</td>
         <td>{autor.address}</td>
@@ -47,28 +53,28 @@ class App extends Component {
   }
 
   setNome(evento){
-    this.setState({ first: evento.target.value});
-    console.log(evento.target.value);
+    this.setState({ name: evento.target.value});
+    // console.log(evento.target.value);
 
   }
   
   setEmail(evento){
     this.setState({ email: evento.target.value});
-    console.log(evento.target.value);
+    // console.log(evento.target.value);
 
   }
   
   setAddress(evento){
     this.setState({address: evento.target.value});
-    console.log(evento.target.value);
+    // console.log(evento.target.value);
 
   }
 
   handleSendForm(e) {
     e.preventDefault();
 
-    const { novaLista, first, email, address } = this.state;
-    novaLista.push(first, email, address);
+    const { novaLista, name, email, address } = this.state;
+    novaLista.push(name, email, address);
     console.log(novaLista);
 
 
@@ -76,7 +82,7 @@ class App extends Component {
 
 
   render() {
-    const { first, email, address } = this.state;
+    const { name, email, address } = this.state;
 
     return (
 
@@ -87,7 +93,7 @@ class App extends Component {
 
         <div id="menu">
             <div className="pure-menu">
-                <a className="pure-menu-heading" >Company</a>
+                <a className="pure-menu-heading">Company</a>
                 <ul className="pure-menu-list">
                     <li className="pure-menu-item"><a className="pure-menu-link">Home</a></li>
                     <li className="pure-menu-item"><a className="pure-menu-link">Autor</a></li>
@@ -101,24 +107,16 @@ class App extends Component {
             </div>
             <div className="content" id="content">
               <div className="pure-form pure-form-aligned">
+
                 <form className="pure-form pure-form-aligned" onSubmit={this.handleSendForm.bind(this)} >
-                  <div className="pure-control-group">
-                    <label htmlFor="first">Nome</label> 
-                    <input id="first" type="text" name="first" value={first} onChange={this.setNome} />                  
-                  </div>
-                  <div className="pure-control-group">
-                    <label htmlFor="email">Email</label> 
-                    <input id="email" type="email" name="email" value={email} onChange={this.setEmail} />                  
-                  </div>
-                  <div className="pure-control-group">
-                    <label htmlFor="endereco">Endereço</label> 
-                    <input id="endereco" type="text" name="endereco" value={address}  onChange={this.setAddress} />                                      
-                  </div>
-                  <div className="pure-control-group">                                  
-                    <label></label> 
-                    <button type="submit" className="pure-button pure-button-primary" >Gravar</button>                                    
-                  </div>
+                  <InputForm label="Nome:" value={name} onChange={this.setNome} />
+                  <InputForm label="Email:" value={email} onChange={this.setEmail} />
+                  <InputForm label="Endereço:" value={address} onChange={this.setAddress} />
+
+                  <ButtonSubmit text="Enviar"/>
+
                 </form>             
+
 
               </div>  
               <div>            
@@ -130,7 +128,9 @@ class App extends Component {
                       <th>Endereço</th>
                     </tr>
                   </thead>
+                  <tbody>
                   { this.renderList()}
+                  </tbody>
                 </table> 
               </div>             
             </div>
