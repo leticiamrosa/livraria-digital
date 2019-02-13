@@ -9,9 +9,14 @@ Para iniciar é necessario ter o Node.js instalado, após isso basta instalar o 
 ### Instalação
 Após clonar o projeto:
 
+Ir até a pasta
 `cd cdc-admin`
 
+Instalar todas as dependência 
 `npm i`
+
+Executar
+`npm start`
 
 
 
