@@ -10,7 +10,14 @@ class App extends Component {
     super();
     this.state = {
       lista: [],
+      first: undefined,
+      email: undefined,
+      address: undefined,
+      novaLista: [],
     };
+    this.setNome = this.setNome.bind(this);
+    this.setEmail = this.setEmail.bind(this);
+    this.setAddress = this.setAddress.bind(this);
   }
 
   componentWillMount() {
@@ -29,17 +36,47 @@ class App extends Component {
     const { lista } = this.state;
     const renderLista = lista.map(autor => {
       return (
-        <tr>
+        <tr key={autor.address}>
         <td>{autor.first} {autor.last}</td>
         <td>{autor.email}</td>
+        <td>{autor.address}</td>
       </tr>
       );
     });
     return renderLista;
-    
   }
 
+  setNome(evento){
+    this.setState({ first: evento.target.value});
+    console.log(evento.target.value);
+
+  }
+  
+  setEmail(evento){
+    this.setState({ email: evento.target.value});
+    console.log(evento.target.value);
+
+  }
+  
+  setAddress(evento){
+    this.setState({address: evento.target.value});
+    console.log(evento.target.value);
+
+  }
+
+  handleSendForm(e) {
+    e.preventDefault();
+
+    const { novaLista, first, email, address } = this.state;
+    novaLista.push(first, email, address);
+    console.log(novaLista);
+
+
+  }
+
+
   render() {
+    const { first, email, address } = this.state;
 
     return (
 
@@ -50,12 +87,11 @@ class App extends Component {
 
         <div id="menu">
             <div className="pure-menu">
-                <a className="pure-menu-heading" href="#">Company</a>
-
+                <a className="pure-menu-heading" >Company</a>
                 <ul className="pure-menu-list">
-                    <li className="pure-menu-item"><a href="#" className="pure-menu-link">Home</a></li>
-                    <li className="pure-menu-item"><a href="#" className="pure-menu-link">Autor</a></li>
-                    <li className="pure-menu-item"><a href="#" className="pure-menu-link">Livro</a></li>
+                    <li className="pure-menu-item"><a className="pure-menu-link">Home</a></li>
+                    <li className="pure-menu-item"><a className="pure-menu-link">Autor</a></li>
+                    <li className="pure-menu-item"><a className="pure-menu-link">Livro</a></li>
                 </ul>
             </div>
         </div>
@@ -65,22 +101,22 @@ class App extends Component {
             </div>
             <div className="content" id="content">
               <div className="pure-form pure-form-aligned">
-                <form className="pure-form pure-form-aligned">
+                <form className="pure-form pure-form-aligned" onSubmit={this.handleSendForm.bind(this)} >
                   <div className="pure-control-group">
-                    <label htmlFor="nome">Nome</label> 
-                    <input id="nome" type="text" name="nome" value=""  />                  
+                    <label htmlFor="first">Nome</label> 
+                    <input id="first" type="text" name="first" value={first} onChange={this.setNome} />                  
                   </div>
                   <div className="pure-control-group">
                     <label htmlFor="email">Email</label> 
-                    <input id="email" type="email" name="email" value=""  />                  
+                    <input id="email" type="email" name="email" value={email} onChange={this.setEmail} />                  
                   </div>
                   <div className="pure-control-group">
-                    <label htmlFor="senha">Senha</label> 
-                    <input id="senha" type="password" name="senha"  />                                      
+                    <label htmlFor="endereco">Endereço</label> 
+                    <input id="endereco" type="text" name="endereco" value={address}  onChange={this.setAddress} />                                      
                   </div>
                   <div className="pure-control-group">                                  
                     <label></label> 
-                    <button type="submit" className="pure-button pure-button-primary">Gravar</button>                                    
+                    <button type="submit" className="pure-button pure-button-primary" >Gravar</button>                                    
                   </div>
                 </form>             
 
@@ -91,6 +127,7 @@ class App extends Component {
                     <tr>
                       <th>Nome</th>
                       <th>email</th>
+                      <th>Endereço</th>
                     </tr>
                   </thead>
                   { this.renderList()}
